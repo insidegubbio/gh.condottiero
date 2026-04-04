@@ -53,8 +53,8 @@ graphhopper:
    - name: gravelbike
      custom_model_files: [mtb.json, bike_elevation.json, gravelbike.json]
     
-   - name: motorcycle
-     custom_model_files: [motorcycle.json, curvature.json]
+   - name: motorbike
+     custom_model_files: [motorbike.json]
 #
 #    - name: custom_profile
 #      navigation_mode: bike

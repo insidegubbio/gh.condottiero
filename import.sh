@@ -13,6 +13,7 @@ mkdir -p logs
 
 cp config.yml /data/config.yml
 cp gravelbike.json /data/gravelbike.json
+cp motorbike.json /data/motorbike.json
 
 if [ -f /data/data.osm.pbf ]; then
     mod_time=$(stat -c "%Y" /data/data.osm.pbf)

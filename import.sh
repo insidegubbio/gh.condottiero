@@ -6,9 +6,7 @@ rm -rf graph-cache-new
 rm -rf logs
 
 mkdir -p graph-cache-new
-mkdir -p /data/srtm
-mkdir -p /data/cgiar
-mkdir -p /data/gmted
+mkdir -p mapterhorn-cache
 mkdir -p logs
 
 cp config.yml /data/config.yml
@@ -46,9 +44,7 @@ fi
 docker run \
     -v /data:/data:ro \
     -v ./graph-cache-new:/graphhopper/graph-cache \
-    -v /data/srtm:/tmp/srtm \
-    -v /data/cgiar:/tmp/cgiar \
-    -v /data/gmted:/tmp/gmted \
+    -v ./mapterhorn-cache:/tmp/pmtiles-cache \
     -v ./logs:/graphhopper/logs \
     graphhopper \
     -c "java -Xms60g -Xmx100g -XX:+UseParallelGC -Ddw.graphhopper.datareader.file=/data/data.osm.pbf -jar *.jar import /data/config.yml"

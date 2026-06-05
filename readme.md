@@ -11,6 +11,25 @@ Some general information is also available here:
 
 https://www.graphhopper.com/blog/2022/06/27/host-your-own-worldwide-route-calculator-with-graphhopper/
 
+With Mapterhorn elevation data, these are the parameters used:
+```
+sudo vim /etc/security/limits.conf
+```
+```
+* - nofile 5000000
+```
+```
+sudo vim /etc/sysctl.conf
+```
+```
+vm.swappiness = 0
+fs.file-max = 5000000
+vm.max_map_count = 4194304
+```
+```
+sudo sysctl -p
+```
+
 ### Docker
 
 Install Docker on the server by following the instructions here: https://docs.docker.com/engine/install/ubuntu/.

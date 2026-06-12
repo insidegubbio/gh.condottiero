@@ -5,16 +5,17 @@ pbf_file=https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
 rm -rf graph-cache-new
 rm -rf logs
 
+mkdir -p data
 mkdir -p graph-cache-new
-mkdir -p mapterhorn-cache
+mkdir -p /data/mapterhorn-cache
 mkdir -p logs
 
-cp config.yml /data/config.yml
-cp gravelbike.json /data/gravelbike.json
-cp motorbike.json /data/motorbike.json
+cp config.yml data/config.yml
+cp gravelbike.json data/gravelbike.json
+cp motorbike.json data/motorbike.json
 
-if [ -f /data/data.osm.pbf ]; then
-    mod_time=$(stat -c "%Y" /data/data.osm.pbf)
+if [ -f data/data.osm.pbf ]; then
+    mod_time=$(stat -c "%Y" data/data.osm.pbf)
     current_time=$(date +%s)
     age=$((current_time - mod_time))
     if [ $age -lt 604800 ]; then
@@ -28,23 +29,23 @@ if [ -f /data/data.osm.pbf ]; then
         fi
     else
         echo "Existing data.osm.pbf file is old. Re-downloading."
-        rm -f /data/data.osm.pbf
-        curl -L $pbf_file -o /data/data.osm.pbf
+        rm -f data/data.osm.pbf
+        curl -L $pbf_file -o data/data.osm.pbf
     fi
 else
     echo "data.osm.pbf file does not exist. Downloading."
-    curl -L $pbf_file -o /data/data.osm.pbf
+    curl -L $pbf_file -o data/data.osm.pbf
 fi
 
-if [ ! -f /data/data.osm.pbf ]; then
+if [ ! -f data/data.osm.pbf ]; then
     echo "data.osm.pbf download failed!"
     exit 1
 fi
 
 docker run \
-    -v /data:/data:ro \
+    -v ./data:/data:ro \
     -v ./graph-cache-new:/graphhopper/graph-cache \
-    -v ./mapterhorn-cache:/tmp/pmtiles-cache \
+    -v /data:/mapterhorn \
     -v ./logs:/graphhopper/logs \
     graphhopper \
     -c "java -Xms60g -Xmx100g -XX:+UseParallelGC -Ddw.graphhopper.datareader.file=/data/data.osm.pbf -jar *.jar import /data/config.yml"

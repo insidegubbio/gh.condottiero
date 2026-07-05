@@ -4,7 +4,7 @@ RUN apt-get update && apt-get install -y wget
 
 RUN wget https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf -O data.osm.pbf
 
-RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/10.0/graphhopper-web-10.0.jar -O graphhopper-web.jar
+RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/11.0/graphhopper-web-11.0.jar -O graphhopper-web.jar
 
 COPY config.yml ./
 RUN java -Xmx6g -jar graphhopper-web.jar import config.yml

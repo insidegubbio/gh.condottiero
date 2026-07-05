@@ -6,13 +6,14 @@ RUN wget https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf -O dat
 
 RUN wget https://repo1.maven.org/maven2/com/graphhopper/graphhopper-web/11.0/graphhopper-web-11.0.jar -O graphhopper-web.jar
 
-COPY config.yml ./
+COPY config.yml gravelbike.json motorbike.json ./
 RUN java -Xmx6g -jar graphhopper-web.jar import config.yml
 
 FROM eclipse-temurin:21-jre
 WORKDIR /data
 COPY --from=build /data/graph-cache ./graph-cache
 COPY --from=build /data/graphhopper-web.jar ./
-COPY config.yml .
+COPY config.yml gravelbike.json motorbike.json ./
+
 EXPOSE 7860
 CMD ["java", "-Xmx2g", "-jar", "graphhopper-web.jar", "server", "config.yml"]

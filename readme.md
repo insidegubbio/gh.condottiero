@@ -1,73 +1,29 @@
-This repository contains the scripts and config files that are running [GraphHopper](github.com/graphhopper/graphhopper) instances for [gpx.studio](https://github.com/gpxstudio/gpx.studio).
+---
+title: gh.condottiero
+sdk: docker
+app_port: 7860
+---
 
-### System parameters
+# gh.condottiero
 
-Follow steps described here:
+Istanza di [GraphHopper](https://github.com/graphhopper/graphhopper) per il routing di [insidegubbio](https://github.com/insidegubbio), basata sugli script e le config di [gpx.studio](https://github.com/gpxstudio/gpx.studio), adattati per il centro italia e per l'hosting su Hugging Face Spaces.
 
-https://github.com/graphhopper/graphhopper/blob/master/docs/core/deploy.md#system-tuning
+## Differenze rispetto all'istanza originale di gpx.studio
+Questa non è un'istanza a scala planetaria come quella di gpx.studio (2 server da 128GB RAM). È pensata per coprire solo Gubbio e l'Umbria, con requisiti di risorse molto più contenuti:
 
+| | gpx.studio | gh.condottiero |
+|---|---|---|
+| Copertura | Mondo intero | Umbria / Centro Italia |
+| Dati OSM | `planet-latest.osm.pbf` | estratto regionale (Geofabrik) |
+| RAM import | ~100GB | 4-6GB |
+| RAM servizio | 128GB×2 server | entro i limiti del tier gratuito HF Space |
+| Elevazione | Mapterhorn | SRTM |
+| Infrastruttura | Load balancer + health check | container singolo Docker su HF Space |
 
-Some general information is also available here:
+## Fonte dati
 
-https://www.graphhopper.com/blog/2022/06/27/host-your-own-worldwide-route-calculator-with-graphhopper/
+Estratto OSM: [Geofabrik – Italia, Centro](https://download.geofabrik.de/europe/italy.html)
 
-With Mapterhorn elevation data, these are the parameters used:
-```
-sudo vim /etc/security/limits.conf
-```
-```
-* - nofile 5000000
-```
-```
-sudo vim /etc/sysctl.conf
-```
-```
-vm.swappiness = 0
-fs.file-max = 5000000
-vm.max_map_count = 4194304
-```
-```
-sudo sysctl -p
-```
+## Profili di routing
 
-### Docker
-
-Install Docker on the server by following the instructions here: https://docs.docker.com/engine/install/ubuntu/.
-Then, add user to the docker group:
-```
-sudo usermod -a -G docker $USER
-```
-and log out and log in.
-Finally, build the Docker image by running the build script.
-```
-./build.sh
-```
-
-### Periodical updates
-
-Open cron file
-```
-crontab -e
-```
-and add a line to schedule the cron.sh script
-```
-20 0 1,14 * * /home/user/graphhopper-config/cron.sh > /home/user/graphhopper-config/cron_logs
-```
-
-### NGINX
-
-Install Nginx:
-```
-sudo apt install nginx
-```
-Then, replace the default configuration and reload the service.
-```
-sudo rm /etc/nginx/sites-enabled/default
-sudo cp graphhopper.conf /etc/nginx/sites-enabled/
-sudo nginx -s reload
-```
-
-### Infrastructure
-
-2 servers with 128GB of RAM.
-Load balancer with health checks.
+Stessi profili dell'istanza originale (bike, racingbike, gravelbike, mtb, foot, motorbike), con lo stesso meccanismo di `custom_model` per escludere le strade private.

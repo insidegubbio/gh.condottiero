@@ -1,6 +1,6 @@
 #!/bin/bash
 
-pbf_file=https://planet.openstreetmap.org/pbf/planet-latest.osm.pbf
+pbf_file=https://download.geofabrik.de/europe/italy/centro-latest.osm.pbf
 
 rm -rf graph-cache-new
 rm -rf logs
@@ -48,7 +48,7 @@ docker run \
     -v /data:/mapterhorn \
     -v ./logs:/graphhopper/logs \
     graphhopper \
-    -c "java -Xms60g -Xmx100g -XX:+UseParallelGC -Ddw.graphhopper.datareader.file=/data/data.osm.pbf -jar *.jar import /data/config.yml"
+    -c "java -Xms2g -Xmx6g -XX:+UseParallelGC -Ddw.graphhopper.datareader.file=/data/data.osm.pbf -jar *.jar import /data/config.yml"
 
 if [ ! -f logs/graphhopper.log ]; then
     rm -rf graph-cache-new

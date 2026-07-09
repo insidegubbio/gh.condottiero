@@ -45,7 +45,8 @@ graphhopper:
 
   #### Elevation ####
 
-  graph.elevation.provider: noop
+  graph.elevation.provider: cgiar
+  graph.elevation.cache_dir: /data/elevation-cache
 
 
   #### Subnetworks ####

@@ -1,25 +1,19 @@
-name: Sync GitHub to Hugging Face Hub
+name: Sync with Hugging Face Hub
 
 on:
   push:
-    branches: [main]
-  workflow_dispatch:
+    branches:
+      - main
 
 jobs:
-  sync:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
-        with:
-          fetch-depth: 0
-          lfs: true
-
-      - name: Sync GitHub to Hugging Face Hub
-        uses: huggingface/hub-sync@v0.2.0
-        with:
-          github_repo_id: ${{ github.repository }}
-          huggingface_repo_id: insidegubbio/gh.condottiero
-          hf_token: ${{ secrets.HF_TOKEN }}
-          repo_type: space
-          space_sdk: docker
-          private: false
+    - name: Sync with Hugging Face
+      uses: nateraw/huggingface-sync-action@v0.0.4
+      with:
+        github_repo_id: insidegubbio/gh.condottiero
+        huggingface_repo_id: insidegubbio/gh.condottiero
+        repo_type: space
+        space_sdk: docker
+        hf_token: ${{ secrets.HF_TOKEN }}
